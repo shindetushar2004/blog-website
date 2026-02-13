@@ -1,11 +1,12 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-
-const blogRoutes = require("./routes/blogRoutes"); // ✅ ADD THIS
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";
+import authRoutes from "./routes/auth.js";
+import blogRoutes from "./routes/blogRoutes.js";
 
 const app = express();
+dotenv.config();
 
 app.use(cors());
 app.use(express.json());
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 
 // ✅ THIS WAS MISSING
 app.use("/api/blogs", blogRoutes);
+app.use("/api/auth", authRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);

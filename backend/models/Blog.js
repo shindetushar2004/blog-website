@@ -1,14 +1,18 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const blogSchema = new mongoose.Schema(
   {
     title: String,
     content: String,
-    // author: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "User",
-    // },
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   { timestamps: true },
 );
-module.exports = mongoose.model("Blog", blogSchema);
+
+const Blog = mongoose.model("Blog", blogSchema);
+
+export default Blog;

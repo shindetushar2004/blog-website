@@ -1,10 +1,11 @@
 import { useState } from "react";
+import axios from "axios";
 import { registerUser } from "../services/api";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [form, setForm] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
   });
@@ -36,8 +37,8 @@ export default function Register() {
 
         <input
           type="text"
-          name="name"
-          placeholder="Name"
+          name="username"
+          placeholder="Username"
           className="w-full mb-3 p-2 border rounded"
           onChange={handleChange}
           required

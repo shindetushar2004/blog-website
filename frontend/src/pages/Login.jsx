@@ -19,16 +19,14 @@ export default function Login() {
     try {
       const res = await loginUser(form);
 
-      localStorage.setItem("user", JSON.stringify(res.data));
-      alert("Login Successful");
+      // save token
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      alert("Login Successful 🎉");
       navigate("/");
     } catch (err) {
       alert("Invalid credentials");
     }
-
-    const res = await API.post("/auth/login", form);
-    localStorage.setItem("token", res.data.token);
-    navigate("/");
   };
 
   return (

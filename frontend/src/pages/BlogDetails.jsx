@@ -27,7 +27,9 @@ const BlogDetail = () => {
     <div className="max-w-3xl mx-auto mt-10 p-6 border rounded shadow">
       <h1 className="text-3xl font-bold mb-4">{blog.title}</h1>
 
-      <p className="text-gray-600 mb-4">By {blog.author?.name}</p>
+      <p className="text-gray-600 mb-4">
+        By {blog.author?.username || "Unknown"}
+      </p>
 
       <p className="mb-6">{blog.content}</p>
 

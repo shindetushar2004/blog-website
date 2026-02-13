@@ -22,6 +22,7 @@ export default function CreateBlog() {
       alert("Blog Created Successfully ✅");
       navigate("/");
     } catch (error) {
+      console.log(error.message);
       alert("Error while creating blog ❌");
     }
   };
