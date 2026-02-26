@@ -12,7 +12,7 @@ const auth = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.user = decoded.id; // only user id store kar rahe hain
+    req.user = decoded; // only user id store kar rahe hain
     next();
   } catch (err) {
     console.log(err);

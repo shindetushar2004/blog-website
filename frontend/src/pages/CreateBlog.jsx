@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createBlog } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function CreateBlog() {
   const [blog, setBlog] = useState({
@@ -19,11 +20,11 @@ export default function CreateBlog() {
 
     try {
       await createBlog(blog);
-      alert("Blog Created Successfully ✅");
+      toast.success("Blog Created Successfully ✅");
       navigate("/");
     } catch (error) {
       console.log(error.message);
-      alert("Error while creating blog ❌");
+      toast.error("Error while creating blog ❌");
     }
   };
 

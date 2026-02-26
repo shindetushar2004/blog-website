@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { registerUser } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -20,10 +21,10 @@ export default function Register() {
     e.preventDefault();
     try {
       await registerUser(form);
-      alert("Registration Successful");
+      toast.success("Registration Successful ✅");
       navigate("/login");
     } catch (err) {
-      alert("Registration Failed");
+      toast.error("Registration Failed ❌");
     }
   };
 
