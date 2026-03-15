@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./App.css"; // ✅ ye already hoga
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";

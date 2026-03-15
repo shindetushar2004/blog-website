@@ -1,42 +1,51 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* ✅ Mobile pe Toast fix */
+@media (max-width: 768px) {
+  .Toastify__toast-container {
+    width: auto !important;
+    max-width: 260px !important;
+    right: 8px !important;
+    left: auto !important;
+    top: 60px !important;
+    padding: 0 !important;
   }
-  to {
-    transform: rotate(360deg);
+
+  .Toastify__toast {
+    font-size: 12px !important;
+    padding: 8px 10px !important;
+    min-height: 36px !important;
+    margin-bottom: 6px !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .Toastify__toast-body {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    flex: 1 !important;
   }
-}
 
-.card {
-  padding: 2em;
-}
+  .Toastify__toast-icon {
+    width: 16px !important;
+    min-width: 16px !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+  }
 
-.read-the-docs {
-  color: #888;
+  .Toastify__close-button {
+    align-self: center !important;
+    flex-shrink: 0 !important;
+    opacity: 0.7 !important;
+  }
 }

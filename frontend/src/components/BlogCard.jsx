@@ -1,66 +1,61 @@
 import { Link, useNavigate } from "react-router-dom";
-import API from "../services/api";
+import { deleteBlog } from "../services/api";
+import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 
-const BlogCard = ({ blog }) => {
+const BlogCard = ({ blog, onDelete }) => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { currentUser } = useAuth();
+  const isAuthor = currentUser?.uid === blog.author?._id;
 
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
-
     try {
-      await API.delete(`/blogs/${blog._id}`);
-      toast.success("Blog deleted successfully ✅", {
-        autoClose: 5000,
-      });
-      window.location.reload();
+      await deleteBlog(blog._id);
+      toast.success("Blog deleted successfully ✅");
+      // ✅ reload nahi — parent ko batao ki ye blog remove karo
+      if (onDelete) onDelete(blog._id);
     } catch (err) {
       console.log(err);
-
-      if (err.response?.status === 401 || err.response?.status === 403) {
-        toast.error("You are not authorized to delete this blog ❌");
-        navigate("/");
-      }
+      toast.error("You are not authorized ❌");
     }
   };
 
-  const handleEdit = () => {
-    navigate(`/edit/${blog._id}`);
-  };
-
   return (
-    <div className="border p-4 rounded shadow bg-white">
-      <h2 className="text-xl font-bold">{blog.title}</h2>
-      <p className="text-gray-600">{blog.content.slice(0, 80)}</p>
-      <p className="text-gray-600 mb-4">
-        By {blog.author?.username || "Unknown"}
-      </p>
+    <div className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition p-5 flex flex-col justify-between">
+      <div>
+        <h2 className="text-lg font-bold text-gray-800 mb-2 line-clamp-2">
+          {blog.title}
+        </h2>
+        <p className="text-gray-500 text-sm line-clamp-3">{blog.content}</p>
+        <p className="text-gray-400 text-xs mt-3">
+          By {blog.author?.username || "Unknown"}
+        </p>
+      </div>
 
-      <div className="mt-4 flex gap-2">
-        {/* VIEW */}
+      <div className="mt-4 flex flex-wrap gap-2">
         <Link
           to={`/blog/${blog._id}`}
-          className="bg-gray-600 text-white px-3 py-1 rounded"
+          className="bg-gray-700 text-white text-sm px-3 py-1.5 rounded-lg hover:bg-gray-800 transition"
         >
           View
         </Link>
-
-        {/* EDIT */}
-        <button
-          onClick={handleEdit}
-          className="bg-blue-600 text-white px-3 py-1 rounded"
-        >
-          Edit
-        </button>
-
-        {/* DELETE */}
-        <button
-          onClick={handleDelete}
-          className="bg-red-600 text-white px-3 py-1 rounded"
-        >
-          Delete
-        </button>
+        {isAuthor && (
+          <>
+            <button
+              onClick={() => navigate(`/edit/${blog._id}`)}
+              className="bg-blue-600 text-white text-sm px-3 py-1.5 rounded-lg hover:bg-blue-700 transition"
+            >
+              Edit
+            </button>
+            <button
+              onClick={handleDelete}
+              className="bg-red-600 text-white text-sm px-3 py-1.5 rounded-lg hover:bg-red-700 transition"
+            >
+              Delete
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

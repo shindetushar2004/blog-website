@@ -4,20 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function CreateBlog() {
-  const [blog, setBlog] = useState({
-    title: "",
-    content: "",
-  });
-
+  const [blog, setBlog] = useState({ title: "", content: "" });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setBlog({ ...blog, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       await createBlog(blog);
       toast.success("Blog Created Successfully ✅");
@@ -25,46 +21,48 @@ export default function CreateBlog() {
     } catch (error) {
       console.log(error.message);
       toast.error("Error while creating blog ❌");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-center px-4">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-4 sm:p-6 md:p-8 rounded-xl shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl"
-      >
-        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center text-gray-800">
+    <div className="min-h-screen bg-gray-50 flex justify-center items-start sm:items-center px-4 py-10">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 w-full max-w-xl p-6 sm:p-8">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">
           Create New Blog
         </h2>
 
-        <input
-          type="text"
-          name="title"
-          placeholder="Blog Title"
-          className="w-full p-2 sm:p-3 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={blog.title}
-          onChange={handleChange}
-          required
-        />
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="title"
+            placeholder="Blog Title"
+            className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+            value={blog.title}
+            onChange={handleChange}
+            required
+          />
 
-        <textarea
-          name="content"
-          placeholder="Write your blog here..."
-          rows="6"
-          className="w-full p-2 sm:p-3 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={blog.content}
-          onChange={handleChange}
-          required
-        />
+          <textarea
+            name="content"
+            placeholder="Write your blog here..."
+            rows="8"
+            className="w-full p-3 mb-5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm resize-none"
+            value={blog.content}
+            onChange={handleChange}
+            required
+          />
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 sm:py-3 rounded-md hover:bg-blue-700 transition duration-300"
-        >
-          Publish Blog
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-medium disabled:opacity-60"
+          >
+            {loading ? "Publishing..." : "Publish Blog"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

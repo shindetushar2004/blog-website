@@ -4,25 +4,83 @@ import BlogCard from "../components/BlogCard";
 
 const Home = () => {
   const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchBlogs()
-      .then((res) => setBlogs(res.data))
-      .catch((err) => console.log(err));
+    const loadBlogs = async () => {
+      try {
+        const data = await fetchBlogs();
+        setBlogs(data);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadBlogs();
   }, []);
 
+  const handleDelete = (deletedId) => {
+    setBlogs((prev) => prev.filter((b) => b._id !== deletedId));
+  };
+
+  if (loading)
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <p style={{ color: "#6b7280" }}>Loading blogs...</p>
+      </div>
+    );
+
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">All Blogs</h1>
+    <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "24px 16px" }}>
+      <h1
+        style={{
+          fontSize: "1.8rem",
+          fontWeight: "bold",
+          marginBottom: "24px",
+          color: "#1f2937",
+        }}
+      >
+        All Blogs
+      </h1>
 
       {blogs.length === 0 ? (
-        <p>No blogs found</p>
+        <p style={{ textAlign: "center", color: "#6b7280", padding: "80px 0" }}>
+          No blogs found
+        </p>
       ) : (
-        <div className="grid md:grid-cols-3 gap-6">
-          {blogs.map((blog) => (
-            <BlogCard key={blog._id} blog={blog} />
-          ))}
-        </div>
+        <>
+          {/* ✅ Inline style grid — Tailwind CDN pe depend nahi */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(4, 1fr)",
+              gap: "20px",
+            }}
+            className="blog-grid"
+          >
+            {blogs.map((blog) => (
+              <BlogCard key={blog._id} blog={blog} onDelete={handleDelete} />
+            ))}
+          </div>
+
+          {/* Responsive override */}
+          <style>{`
+            @media (max-width: 1024px) {
+              .blog-grid { grid-template-columns: repeat(2, 1fr) !important; }
+            }
+            @media (max-width: 600px) {
+              .blog-grid { grid-template-columns: repeat(1, 1fr) !important; }
+            }
+          `}</style>
+        </>
       )}
     </div>
   );
